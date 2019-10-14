@@ -81,8 +81,9 @@ func DBSumPerUser(db *gorm.DB) error {
 			return err
 		}
 
-		if contains(users, db) {
-			ret[users["test-user"].Name] += size
+		ok, userName := contains(users, db)
+		if ok {
+			ret[userName] += size
 		}
 	}
 
@@ -110,13 +111,13 @@ func do(db *gorm.DB, query string, dbs []string) error {
 	return nil
 }
 
-func contains(users map[string]User, e string) bool {
+func contains(users map[string]User, e string) (bool, string) {
 	for _, u := range users {
 		for _, v := range u.DBs {
 			if e == v {
-				return true
+				return true, u.Name
 			}
 		}
 	}
-	return false
+	return false, ""
 }
