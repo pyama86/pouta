@@ -108,6 +108,9 @@ func do(db *gorm.DB, query string, dbs []string) error {
 			return err
 		}
 	}
+	if err := db.Exec("flush privileges").Error; err != nil {
+		return err
+	}
 	return nil
 }
 
